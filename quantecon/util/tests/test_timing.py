@@ -41,22 +41,30 @@ class TestTicTacToc():
             # skip for darwin
             return
 
+        def test_function_no_arg():
+            return time.sleep(0.1)
+
         def test_function_one_arg(n):
             return time.sleep(n)
 
         def test_function_two_arg(n, a):
             return time.sleep(n)
 
+        test_no_arg = \
+            loop_timer(5, test_function_no_arg, digits=10)
         test_one_arg = \
             loop_timer(5, test_function_one_arg, self.h, digits=10)
         test_two_arg = \
             loop_timer(5, test_function_two_arg, [self.h, 1], digits=10)
+        for tm in test_no_arg:
+            assert(abs(tm - self.h) < 0.01), tm
         for tm in test_one_arg:
             assert(abs(tm - self.h) < 0.01), tm
         for tm in test_two_arg:
             assert(abs(tm - self.h) < 0.01), tm
 
-        for (average_time, average_of_best) in [test_one_arg, test_two_arg]:
+        for (average_time, average_of_best) in \
+            [test_no_arg, test_one_arg, test_two_arg]:
             ok_(average_time >= average_of_best)
 
 
